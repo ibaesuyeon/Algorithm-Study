@@ -1,57 +1,57 @@
 import java.io.*;
 import java.util.*;
 public class Main {
-    static int map[][];
+    static int[][] arr;
     static int n;
-    static int ans= Integer.MAX_VALUE;
-    static int dx[] = {0,0,1,-1};
-    static int dy[] = {1,-1,0,0};
-    static boolean visited[][];
+    static int min = Integer.MAX_VALUE;
+    static int[] dx = {0,0,1,-1};
+    static int[] dy = {1,-1,0,0};
+    static boolean[][] visited;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
+
         n = Integer.parseInt(br.readLine());
-        map = new int[n+1][n+1];
+        arr = new int[n+1][n+1];
         visited = new boolean[n+1][n+1];
-        
+
         for(int i=1; i<=n; i++) {
-            String[] map_input = br.readLine().split(" ");
+            StringTokenizer st = new StringTokenizer(br.readLine());
             for(int j=1; j<=n; j++) {
-                map[i][j] = Integer.parseInt(map_input[j-1]);
+                arr[i][j] = Integer.parseInt(st.nextToken());
             }
-        }       
+        }
         dfs(0,0);
-        System.out.println(ans);
+        System.out.println(min);
     }
-    public static void dfs(int level,  int sum) {
-        if(level ==3) {
-            ans=Math.min(ans, sum);
+    public static void dfs(int seeds,  int sum) {
+        if(seeds ==3) {
+            min =Math.min(min, sum);
             return;
         }
-        
+
         for(int i=1; i<=n; i++) {
             for(int j=1; j<=n; j++) {
                 if(isPossible(i,j)) {
-                    int tmp_sum = get_sum(i,j);
-                    setting_visited(i,j,true);
-                    dfs(level+1,sum+tmp_sum);
-                    setting_visited(i,j,false);
+                    int temp = get_sum(i,j);
+                    set_visit(i,j,true);
+                    dfs(seeds+1,sum+temp);
+                    set_visit(i,j,false);
                 }
             }
         }
-        
+
     }
     public static int get_sum(int x, int y) {
-        int sum = map[x][y];
+        int sum = arr[x][y];
         for(int i=0; i<4; i++) {
             int nx = x+dx[i];
             int ny = y+dy[i];
-            sum+=map[nx][ny];
+            sum+= arr[nx][ny];
         }
         return sum;
     }
-    public static void setting_visited(int x, int y,boolean flag) {
-        if(flag) {
+    public static void set_visit(int x, int y, boolean v) {
+        if(v) {
             visited[x][y] =true;
             for(int i=0; i<4; i++) {
                 int nx = x+dx[i];
@@ -69,9 +69,9 @@ public class Main {
         }
     }
     public static boolean isPossible(int x, int y) {
-            if(visited[x][y]) {
-                return false;
-            }
+        if(visited[x][y]) {
+            return false;
+        }
         for(int i=0; i<4; i++) {
             int nx = x+dx[i];
             int ny = y+dy[i];
